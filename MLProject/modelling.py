@@ -35,32 +35,29 @@ mlflow.set_experiment("heart_disease_classification")
 # ── Training dengan autolog ───────────────────────────────
 print("\nMemulai training...")
 
-mlflow.sklearn.autolog()
+mlflow.sklearn.autolog(log_model_signatures=False)
 
-with mlflow.start_run(run_name="RandomForest_CI"):
-
-    model = RandomForestClassifier(
+model = RandomForestClassifier(
         n_estimators=100,
         max_depth=10,
         random_state=42
-    )
-    model.fit(X_train, y_train)
+)
+model.fit(X_train, y_train)
 
-    # Evaluasi
-    y_pred = model.predict(X_test)
+# Evaluasi
+y_pred = model.predict(X_test)
 
-    accuracy  = accuracy_score(y_test, y_pred)
-    f1        = f1_score(y_test, y_pred, average='weighted')
-    precision = precision_score(y_test, y_pred, average='weighted')
-    recall    = recall_score(y_test, y_pred, average='weighted')
+accuracy  = accuracy_score(y_test, y_pred)
+f1        = f1_score(y_test, y_pred, average='weighted')
+precision = precision_score(y_test, y_pred, average='weighted')
+recall    = recall_score(y_test, y_pred, average='weighted')
 
-    print("\nHasil Evaluasi:")
-    print(f"   Accuracy  : {accuracy:.4f}")
-    print(f"   F1 Score  : {f1:.4f}")
-    print(f"   Precision : {precision:.4f}")
-    print(f"   Recall    : {recall:.4f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred,
-                                target_names=['Sehat', 'Sakit']))
+print("\nHasil Evaluasi:")
+print(f"   Accuracy  : {accuracy:.4f}")
+print(f"   F1 Score  : {f1:.4f}")
+print(f"   Precision : {precision:.4f}")
+print(f"   Recall    : {recall:.4f}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, target_names=['Sehat', 'Sakit']))
 
 print("\nTraining selesai!")
