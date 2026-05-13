@@ -1,0 +1,37 @@
+name: CI - MLflow Training
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install mlflow==2.19.0 scikit-learn==1.8.0 pandas numpy matplotlib seaborn
+
+      - name: Run MLflow Project
+        run: |
+          mlflow run MLProject --env-manager=local
+
+      - name: Upload artifacts to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: |
+            mlruns/
+            mlartifacts/
+          retention-days: 7
